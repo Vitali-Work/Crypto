@@ -1,0 +1,5 @@
+final class Example {
+
+    static final String Key = "E9DEE72C8F0C0FA62DDB49F46F73964706075316ED247A3739CBA38303A98BF6";
+
+}

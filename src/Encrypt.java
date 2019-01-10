@@ -3,6 +3,5 @@ public class Encrypt {
 
         String a = "FFFF";
         System.out.println(Converter.toBinString(a));
-
     }
 }

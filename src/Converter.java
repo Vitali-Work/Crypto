@@ -26,6 +26,15 @@ public final class Converter {
         return BinStr;
     }
 
+    public static String toBinString(int number){
+
+        String BinStr = "";
+        BinStr = Integer.toBinaryString(number);
+        while (BinStr.length() % 8 != 0){
+            BinStr = "0" + BinStr;
+        }
+        return BinStr;
+    }
 
     public static String toHexString(String BinStr){
 
@@ -37,6 +46,18 @@ public final class Converter {
         }
         return HexStr.toUpperCase();
     }
+
+    public static String toHexString(long number){
+
+        String HexStr = Long.toHexString(number);
+
+        while (HexStr.length() % 2 != 0){
+            HexStr = "0" + HexStr;
+        }
+
+        return HexStr.toUpperCase();
+    }
+
 
     public static String[] Split (String Str, int Parts){
 
@@ -80,6 +101,11 @@ public final class Converter {
                 rez[j*8+i] = arr[i];
             }
         }
+
+        for (int i = 0; i<56; i++){
+            rez[i] = toHexString(rez[i]);
+        }
+
         return rez;
     }
 
@@ -123,6 +149,13 @@ public final class Converter {
 
     public static String RotHi (String StrHex, int r){
 
+        String[] tmpH = Split(StrHex, 4);
+
+        StrHex = "";
+        for (String s : tmpH){
+            StrHex += getValueH(s);
+        }
+
         //объявляем переменные
         String[] rez = new String[32];
         int newIndex;
@@ -159,12 +192,92 @@ public final class Converter {
         for (int i=0; i<n; i++){
             int _u = Integer.parseInt(uArr[i], 2);
             int _v = Integer.parseInt(vArr[i], 2);
-            int _w = (_u + _v) / 2;
+            int _w = (_u + _v) % 2;
 
             wArr[i] = Integer.toString(_w);
         }
 
         return Converter.toHexString(Converter.Concatenate(wArr));
+
+    }
+
+    public static String Reverse (String HexStr){
+
+        String rez = "";
+        String[] parts = Split(HexStr, HexStr.length() / 2);
+
+        for (String tmp : parts){
+            rez = tmp + rez;
+        }
+        return rez;
+    }
+
+    public static long toDec (String HexStr){
+
+        return Long.parseUnsignedLong(Reverse(HexStr), 16);
+
+    }
+
+    public static String PlusVKvadrate (String u, String v) {
+
+        //определяем сколько бит в числах
+        int n = u.length() / 2;
+
+        //выполняем вычисления
+
+        long ul = toDec(u);
+        long vl = toDec(v);
+
+        long sum = ul + vl;
+        int pow = 8*n;
+        long tmp = sum % (long)Math.pow(2, pow);
+
+        //конвертим результат обратно в хекс
+        String rez = toHexString(tmp);
+
+        //дописываем 0 в начале, чтобы на выходе было столькоже бит, сколько и на входе
+        while (rez.length() < u.length() ){
+            rez = "0" + rez;
+        }
+
+        return rez;
+
+    }
+
+    public static String MinusVKvadrate (String u, String v) {
+
+        //определяем сколько бит в числах
+        int n = u.length() / 2;
+
+        //выполняем вычисления
+        long sum = toDec(u) - toDec(v);
+        int pow = 8*n;
+        long tmp = sum % (long)Math.pow(2, pow);
+
+        //конвертим результат обратно в хекс
+        String rez = toHexString(tmp);
+
+        //дописываем 0 в начале, чтобы на выходе было столькоже бит, сколько и на входе
+        while (rez.length() < u.length() ){
+            rez = "0" + rez;
+        }
+
+        return Reverse(rez);
+
+    }
+
+    public static String I32 (int i) {
+
+        /*
+        String rez = toBinString(i);
+
+        //дописываем 0 в начале, чтобы на выходе было столькоже бит, сколько и на входе
+        while (rez.length() % 32 != 0  ){
+            rez = "0" + rez;
+        }
+
+        return toHexString(rez);
+        */
 
     }
 

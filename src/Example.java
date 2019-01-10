@@ -1,5 +1,6 @@
 final class Example {
 
     static final String Key = "E9DEE72C8F0C0FA62DDB49F46F73964706075316ED247A3739CBA38303A98BF6";
-
+    static final String X   = "B194BAC80A08F53B366D008E584A5DE4";
+    static final String y   = "69CCA1C93557C9E3D66BC3E0FA88FA6E";
 }

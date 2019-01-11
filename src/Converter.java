@@ -2,21 +2,42 @@ public final class Converter {
 
     public static String toBinString(String HexStr){
 
-        String BinStr = "";
-        char[] HexChar = HexStr.toCharArray();
+        /*
+          Метод конвертирует HEX-строку в BIN-строку
+        Входные данные:
+          String HexStr - HEX-строка
+        Выходные данные:
+          String BinStr - BIN-строка
+          10FF  -->  0001000011111111
+        Дополнительно:
+          Каждый символ HEX-строки конвертируется в 4 символа BIN-строки
+        */
 
+        String tmpBin = "";
+        char[] HexChar;
+        String BinStr = "";
+        HexChar = HexStr.toCharArray();
         for (char ch : HexChar){
-            String tmpBin = Integer.toBinaryString(Integer.parseInt(Character.toString(ch), 16));
+            tmpBin = Integer.toBinaryString(Integer.parseInt(Character.toString(ch), 16));
             while (tmpBin.length() < 4){
                 tmpBin = "0" + tmpBin;
             }
             BinStr = BinStr + tmpBin;
         }
-
         return BinStr;
     }
 
     public static String toBinString(long number){
+        /*
+          Метод конвертирует LONG-число в BIN-строку
+        Входные данные:
+          long number - LONG-число
+        Выходные данные:
+          String BinStr - BIN-строка
+          4859  -->  0001001011111011
+        Дополнительно:
+          Количество символов в BIN-строке будет кратно 8
+        */
 
         String BinStr = "";
         BinStr = Long.toBinaryString(number);
@@ -26,17 +47,17 @@ public final class Converter {
         return BinStr;
     }
 
-    public static String toBinString(int number){
-
-        String BinStr = "";
-        BinStr = Integer.toBinaryString(number);
-        while (BinStr.length() % 8 != 0){
-            BinStr = "0" + BinStr;
-        }
-        return BinStr;
-    }
-
     public static String toHexString(String BinStr){
+        /*
+          Метод конвертирует BIN-строку в HEX-строку
+        Входные данные:
+          String BinStr - BIN-строка
+        Выходные данные:
+          String HexStr - HEX-строка
+          11000111010110011101010100101111  -->  C759D52F
+        Дополнительно:
+          Количество символов в HEX-строке будет 8
+        */
 
         String HexStr = "";
 
@@ -174,8 +195,8 @@ public final class Converter {
             rez[newIndex] = BinArr[i];
         }
 
-        String[] tmp = Converter.Split(Converter.toHexString(Converter.Concatenate(rez)), 4);
-        return tmp[3] + tmp[2] + tmp[1] + tmp[0];
+
+        return Reverse(Converter.toHexString(Converter.Concatenate(rez)));
     }
 
     public static String PlusVKrujke (String u, String v){
@@ -220,6 +241,8 @@ public final class Converter {
 
     public static String PlusVKvadrate (String u, String v) {
 
+
+
         //определяем сколько бит в числах
         int n = u.length() / 2;
 
@@ -256,6 +279,10 @@ public final class Converter {
 
         //конвертим результат обратно в хекс
         String rez = toHexString(tmp);
+        if (rez.length() > 8) {
+            rez = rez.substring(8, 16);
+        }
+
 
         //дописываем 0 в начале, чтобы на выходе было столькоже бит, сколько и на входе
         while (rez.length() < u.length() ){
@@ -266,9 +293,9 @@ public final class Converter {
 
     }
 
-    public static String I32 (int i) {
+    public static String I32 (long i) {
 
-        /*
+
         String rez = toBinString(i);
 
         //дописываем 0 в начале, чтобы на выходе было столькоже бит, сколько и на входе
@@ -276,9 +303,7 @@ public final class Converter {
             rez = "0" + rez;
         }
 
-        return toHexString(rez);
-        */
-
+        return Reverse(toHexString(rez));
     }
 
 

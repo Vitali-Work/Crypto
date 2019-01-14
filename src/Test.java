@@ -3,6 +3,9 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args){
 
+        System.out.println(Long.toHexString(Utils.rotHi(Long.parseLong(""))));
+
+        /*
         Date date = new Date();
         long d1 = date.getTime();
         System.out.println("example Y: " + Example.y);
@@ -34,6 +37,11 @@ public class Test {
             tmp += s;
         }
         return Converter.toHexString(tmp);
+
+    */
+
     }
+
+
 
 }

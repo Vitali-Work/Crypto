@@ -170,12 +170,15 @@ public final class Converter {
 
     public static String RotHi (String StrHex, int r){
 
+        /*
         String[] tmpH = Split(StrHex, 4);
 
         StrHex = "";
         for (String s : tmpH){
             StrHex += getValueH(s);
         }
+        */
+
 
         //объявляем переменные
         String[] rez = new String[32];
@@ -196,7 +199,8 @@ public final class Converter {
         }
 
 
-        return Reverse(Converter.toHexString(Converter.Concatenate(rez)));
+        //return Reverse(Converter.toHexString(Converter.Concatenate(rez)));
+        return Converter.toHexString(Converter.Concatenate(rez));
     }
 
     public static String PlusVKrujke (String u, String v){

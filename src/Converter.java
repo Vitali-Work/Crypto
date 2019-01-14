@@ -306,5 +306,33 @@ public final class Converter {
         return Reverse(toHexString(rez));
     }
 
+    public static String sigma1 (String u) {
+
+        String[] tmpU = Split(u, 4);
+
+        String key = tmpU[0] + tmpU[1];
+        String message = PlusVKrujke(tmpU[2], tmpU[3]);
+
+        return PlusVKrujke(PlusVKrujke(Encryption.Encrypt(message, key), tmpU[2]), tmpU[3]);
+
+    }
+
+
+    public static String sigma2 (String u) {
+
+        String[] tmpU = Split(u, 4);
+
+        String tmpSigma = sigma1(u);
+        String odin128 = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
+
+        String key1 = tmpSigma + tmpU[3];
+        String key2 = PlusVKrujke(tmpSigma, odin128) + tmpU[2];
+
+        return PlusVKrujke(Encryption.Encrypt(tmpU[0], key1), tmpU[0]) + PlusVKrujke(Encryption.Encrypt(tmpU[1], key2), tmpU[1]);
+
+    }
+
+
+
 
 }

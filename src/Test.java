@@ -3,7 +3,18 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args){
 
-        System.out.println(Long.toHexString(Utils.rotHi(Long.parseLong(""))));
+        long num = 0xf012f298;
+
+        long n1 = num & 0xff;
+        long n2 = (num >> 8) & 0xff;
+        long n3 = (num >> 16) & 0xff;
+        long n4 = (num >> 24) & 0xff;
+
+        printValue(num);
+        printValue(n1);
+        printValue(n2);
+        printValue(n3);
+        printValue(n4);
 
         /*
         Date date = new Date();
@@ -13,33 +24,21 @@ public class Test {
         System.out.println("-----------------");
         Date date2 = new Date();
         long d2 = date2.getTime();
-        System.out.println(d2-d1);
-
-
-        String s = getString("0", 128);
-        String tmph1 = "";
-        String tmph2 = "";
-        for (int i = 0; i<16; i++){
-            tmph1 += Converter.H[0][i];
-            tmph2 += Converter.H[1][i];
-        }
-        String h = tmph1 + tmph2;
-
-        String Y = Converter.sigma2(getString("0", 128) + Converter.PlusVKrujke(s, Converter.sigma1(h+h)) +  Converter.sigma2(h+h));
-
-        System.out.println(Y);
-
+    */
     }
 
-    public static String getString (String s, int n){
-        String tmp = "";
-        for (int i = 0; i<n; i++){
-            tmp += s;
+    public static void printValue(long l) {
+
+        String s = Long.toBinaryString(l);
+        while (s.length() % 32 != 0) {
+            s = "0" + s;
         }
-        return Converter.toHexString(tmp);
-
-    */
-
+        String[] arrStr = Converter.Split(s, 8);
+        String s1 = "";
+        for (int i = 0; i<8; i++){
+            s1 = s1 + arrStr[i] + " ";
+        }
+        System.out.println(s1 + "   " + Long.toHexString(l));
     }
 
 

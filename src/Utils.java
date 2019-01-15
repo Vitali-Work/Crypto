@@ -1,5 +1,16 @@
 public final class Utils {
 
+    public static String toHexString(String BinStr){
+
+        String HexStr = "";
+
+        for(int i = 0; i<BinStr.length(); i = i + 4){
+            String tmpHex = Integer.toHexString(Integer.parseInt(BinStr.substring(i, i+4), 2));
+            HexStr = HexStr + tmpHex;
+        }
+        return HexStr.toUpperCase();
+    }
+
     public static long sumModuleN(long u, long v, int n){
 
         long pow = (long)Math.pow(2, n);
@@ -57,22 +68,48 @@ public final class Utils {
         }
     }
 
-    public static long getH(String str) {
 
-        long h = Long.parseLong(str, 16);
+    public static long[] getArrayFromString (long h){
+        long[] rez = new long[4];
+        String hexStr = Long.toHexString(h);
+        while (hexStr.length() != 8){
+            hexStr = "0" + hexStr;
+        }
+        String[] hexArr = split(hexStr, 4);
+        for(int i = 0; i<4; i++){
+            rez[i] = Long.parseLong(hexArr[i], 16);
+        }
+        return rez;
+    }
+
+    public static String getStringForRotHi(long h) {
+
+        long[] arrLong = getArrayFromString(h);
+
+
+        long tmpH;
 
         if (h <= 16L) {
             //например, H(0D) = H[0][D] = H[16*0 + D]
 
-            return H[(int)h];
+            tmpH = H[(int)h];
         }
         else {
             char[] chars =  Long.toHexString(h).toCharArray();
             int row = Integer.parseInt(Character.toString(chars[0]), 16);
             int col = Integer.parseInt(Character.toString(chars[1]), 16);
 
-            return H[16 * row + col];
+            tmpH =  H[16 * row + col];
         }
+
+        String rez = Long.toBinaryString(tmpH);
+
+
+        while (rez.length() % 32 != 0){
+            rez = "0" + rez;
+        }
+
+        return rez;
     }
 
 
@@ -98,6 +135,15 @@ public final class Utils {
         return rez;
     }
 
+    public static String concatenate (String[] Arr){
+
+        String rez = "";
+        for (String s : Arr){
+            rez += s;
+        }
+        return rez;
+    }
+
     public static String reverse (String HexStr){
 
         String rez = "";
@@ -111,43 +157,7 @@ public final class Utils {
 
     public static long rotHi(long num, int r){
 
-        //10
-
-        String s = Long.toHexString(num);
-        while (s.length() % 8 != 0 ){
-            s = "0" + s;
-        }
-
-        s = reverse(s);
-
-        long rez = Long.parseLong(tmpS, 16);
-        return rez;
-        //a
-/*
-
-
-        //0000000a
-
-        String[] bytes = split(s, 4);
-
-        //[00, 00, 00, 0a]
-
-        String tmpS = "";
-
-        //""
-
-        for(int i = 0; i<4; i++){
-
-           String s1 = Long.toHexString(getH(bytes[i])); //B1
-           while (s1.length() % 2 != 0 ){
-                s1 = "0" + s1;
-           }
-
-           tmpS = s1 + tmpS;
-
-        }
-*/
-
+        return 1L;
     }
 
 }

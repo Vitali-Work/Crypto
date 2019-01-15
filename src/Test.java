@@ -3,7 +3,19 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args){
 
-        long num = 0xf012f298;
+        System.out.println("example Y: " + Example.y);
+        System.out.println("encrypt Y: " + Encryption.Encrypt(Example.X, Example.Key));
+        System.out.println("encrypt Y: " + Encryption.EncryptV2(Example.X, Example.Key));
+
+
+        System.out.println(Long.parseLong("b194bac8", 16));
+        System.out.println(Long.parseLong("c8ba94b1", 16));
+
+        System.out.println(Long.toHexString(Utils.cyclicShift(Long.parseLong("b194bac8", 16), 1)));
+
+        /*
+        System.out.println(Long.toHexString(Utils.getKey(Example.Key)[0]));
+        long num = 0x11223344;
 
         long n1 = num & 0xff;
         long n2 = (num >> 8) & 0xff;
@@ -16,7 +28,12 @@ public class Test {
         printValue(n3);
         printValue(n4);
 
-        /*
+        long n5 = (n1 << 24) | (n2 << 16) | (n3 << 8) | n4;
+        printValue(n5);
+
+        System.out.println(Long.toHexString(Utils.rotHi(0xb194bac8, 1)));
+
+
         Date date = new Date();
         long d1 = date.getTime();
         System.out.println("example Y: " + Example.y);

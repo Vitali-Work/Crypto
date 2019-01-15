@@ -170,15 +170,13 @@ public final class Converter {
 
     public static String RotHi (String StrHex, int r){
 
-        /*
+
         String[] tmpH = Split(StrHex, 4);
 
         StrHex = "";
         for (String s : tmpH){
             StrHex += getValueH(s);
         }
-        */
-
 
         //объявляем переменные
         String[] rez = new String[32];

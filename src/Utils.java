@@ -1,16 +1,5 @@
 public final class Utils {
 
-    public static String toHexString(String BinStr){
-
-        String HexStr = "";
-
-        for(int i = 0; i<BinStr.length(); i = i + 4){
-            String tmpHex = Integer.toHexString(Integer.parseInt(BinStr.substring(i, i+4), 2));
-            HexStr = HexStr + tmpHex;
-        }
-        return HexStr.toUpperCase();
-    }
-
     public static long sumModuleN(long u, long v, int n){
 
         long pow = (long)Math.pow(2, n);
@@ -24,6 +13,14 @@ public final class Utils {
         long pow = (long)Math.pow(2, 32);
 
         return (u + v) % pow;
+
+    }
+
+    public static long difModuleN(long u, long v){
+
+        long pow = (long)Math.pow(2, 32);
+
+        return (u - v) % pow;
 
     }
 
@@ -54,8 +51,9 @@ public final class Utils {
 
     public static long getH(long h) {
 
-        if (h <= 16L) {
-            //например, H(0D) = H[0][D] = H[16*0 + D]
+        //Метод получает новое значение для h из таблицы подстановки Н
+
+        if (h <= 16L) {         //например, H(0D) = H[0][D] = H[16*0 + D]
 
             return H[(int)h];
         }
@@ -68,62 +66,32 @@ public final class Utils {
         }
     }
 
+    public static long getSubstitution (long num){
 
-    public static long[] getArrayFromString (long h){
-        long[] rez = new long[4];
-        String hexStr = Long.toHexString(h);
-        while (hexStr.length() != 8){
-            hexStr = "0" + hexStr;
-        }
-        String[] hexArr = split(hexStr, 4);
-        for(int i = 0; i<4; i++){
-            rez[i] = Long.parseLong(hexArr[i], 16);
-        }
-        return rez;
+        //Метод возвращает значение с применением подстановки из таблицы Н
+
+                                        //num = 0x11223344
+        long n4 = num & 0xff;           //n4  = 0x44
+        long n3 = (num >> 8) & 0xff;    //n3  = 0x33
+        long n2 = (num >> 16) & 0xff;   //n2  = 0x22
+        long n1 = (num >> 24) & 0xff;   //n1  = 0x11
+                                        //rez = 0x44332211
+        n4 = getH(n4);
+        n3 = getH(n3);
+        n2 = getH(n2);
+        n1 = getH(n1);
+
+        return  (n1 << 24) | (n2 << 16) | (n3 << 8) | n4;
+
     }
-
-    public static String getStringForRotHi(long h) {
-
-        long[] arrLong = getArrayFromString(h);
-
-
-        long tmpH;
-
-        if (h <= 16L) {
-            //например, H(0D) = H[0][D] = H[16*0 + D]
-
-            tmpH = H[(int)h];
-        }
-        else {
-            char[] chars =  Long.toHexString(h).toCharArray();
-            int row = Integer.parseInt(Character.toString(chars[0]), 16);
-            int col = Integer.parseInt(Character.toString(chars[1]), 16);
-
-            tmpH =  H[16 * row + col];
-        }
-
-        String rez = Long.toBinaryString(tmpH);
-
-
-        while (rez.length() % 32 != 0){
-            rez = "0" + rez;
-        }
-
-        return rez;
-    }
-
 
     public static String[] split (String Str, int Parts){
 
-        //определяем сколько будет частей строки
+        // Метод разделеет строку Str на массив строк, количество которых равно Parts
+
         int CharInPart = Str.length() / Parts;
-
-        //создаем пустой массив по количеству частей
         String[] rez = new String[Parts];
-
-        int n = 0;  //Объявляем счетчик для массива
-
-        //копируем по несколько символов в новые строки и заносим их в массив
+        int n = 0;
         for(int i = 0; i<Str.length(); i = i + CharInPart){
 
             int StartIndex = i;
@@ -137,6 +105,8 @@ public final class Utils {
 
     public static String concatenate (String[] Arr){
 
+        //Метод склеивает массив строк Arr в одну строку rez
+
         String rez = "";
         for (String s : Arr){
             rez += s;
@@ -144,20 +114,100 @@ public final class Utils {
         return rez;
     }
 
-    public static String reverse (String HexStr){
+    public static long reverse (long num){
 
-        String rez = "";
-        String[] parts = split(HexStr, HexStr.length() / 2);
+        //Метод изменяет порядок байт в числе на противоположный
 
-        for (String tmp : parts){
-            rez = tmp + rez;
-        }
-        return rez;
+                                        //num = 0x11223344
+        long n4 = num & 0xff;           //n4  = 0x44
+        long n3 = (num >> 8) & 0xff;    //n3  = 0x33
+        long n2 = (num >> 16) & 0xff;   //n2  = 0x22
+        long n1 = (num >> 24) & 0xff;   //n1  = 0x11
+                                        //rez = 0x44332211
+
+        return (n4 << 24) | (n3 << 16) | (n2 << 8) | n1;
+
     }
 
-    public static long rotHi(long num, int r){
+    public static String extendString (String str, int сharacters){
 
-        return 1L;
+        //Метод дописывает в начало строки str символы "0", чтобы количество символов строки было кратно сharacters
+
+        while (str.length() % сharacters != 0){
+            str = "0" + str;
+        }
+        return str;
+    }
+
+    public static long cyclicShift(long num, int r){
+
+        //Метод производит циклический сдвиг влево на r позиций
+
+        String[] rez = new String[32];
+        int newIndex;
+
+        String[] BinArr = split(extendString(Long.toBinaryString(reverse(num)), 32), 32);
+
+
+        //проходим по всем элементам массива и вычисляем их новые индексы
+        //записываем в массив rez элементы на их новые (вычисленные) места
+        for (int i = 0; i<32; i++){
+            if ((i-r)<0){
+                newIndex = 32 + i - r;
+            }
+            else {
+                newIndex = i-r;
+            }
+            rez[newIndex] = BinArr[i];
+        }
+
+        return reverse(Long.parseLong(concatenate(rez), 2));
+    }
+
+    public static long rotHi (long num, int r){
+
+        //Циклический сдвиг влево с предварительной подстановкой из таблицы Н
+
+        num = getSubstitution(num);
+        return cyclicShift(num, r);
+    }
+
+    public static long rotHi5 (long num){
+
+        //Циклический сдвиг влево с предварительной подстановкой из таблицы Н на 5 позиций
+
+        return rotHi(num, 5);
+    }
+
+    public static long rotHi13 (long num){
+
+        //Циклический сдвиг влево с предварительной подстановкой из таблицы Н на 13 позиций
+
+        return rotHi(num, 13);
+    }
+
+    public static long rotHi21 (long num){
+
+        //Циклический сдвиг влево с предварительной подстановкой из таблицы Н на 21 позицию
+
+        return rotHi(num, 21);
+    }
+
+    public static long[] getKey (String masterKey){
+
+        String[] strKey = split(masterKey, 8);
+
+        long[] key = new long[56];
+        key[0] = key[8]  = key[16] = key[24] = key[32] = key[40] = key[48] = Long.parseLong(strKey[0], 16);
+        key[1] = key[9]  = key[17] = key[25] = key[33] = key[41] = key[49] = Long.parseLong(strKey[1], 16);
+        key[2] = key[10] = key[18] = key[26] = key[34] = key[42] = key[50] = Long.parseLong(strKey[2], 16);
+        key[3] = key[11] = key[19] = key[27] = key[35] = key[43] = key[51] = Long.parseLong(strKey[3], 16);
+        key[4] = key[12] = key[20] = key[28] = key[36] = key[44] = key[52] = Long.parseLong(strKey[4], 16);
+        key[5] = key[13] = key[21] = key[29] = key[37] = key[45] = key[53] = Long.parseLong(strKey[5], 16);
+        key[6] = key[14] = key[22] = key[30] = key[38] = key[46] = key[54] = Long.parseLong(strKey[6], 16);
+        key[7] = key[15] = key[23] = key[31] = key[39] = key[47] = key[55] = Long.parseLong(strKey[7], 16);
+
+        return key;
     }
 
 }

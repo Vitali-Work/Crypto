@@ -3,9 +3,22 @@ import java.util.Date;
 public class Test {
     public static void main(String[] args) {
 
-        long a = Long.parseLong("ff22334455667788", 16);
+        byte[] mes = new byte[32];
+        for (int i = 0; i<32; i++){
+            mes[i] = (byte)Utils.getH(i);
+        }
 
-        System.out.println(Long.toHexString(a));
+        Hashing.getHashStart();
+
+        System.out.println(Hashing.byteCount);
+        System.out.println(Hashing.s);
+        System.out.println(Hashing.h);
+
+        Hashing.getHashH(mes);
+
+        System.out.println(Hashing.getHashG());
+        System.out.println(Hashing.byteCount);
+
     }
  /*
        long timeSum1 = 0, timeSum2 = 0;

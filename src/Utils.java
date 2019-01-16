@@ -1,5 +1,7 @@
 public final class Utils {
 
+
+
     public static long sumModuleN(long u, long v){
 
         u = reverse(u);
@@ -43,7 +45,7 @@ public final class Utils {
 
     public static long xor(long u, long v) {
 
-        //u и v - числа по 4 байта
+        //u и v - числа до 4 байта
         return u^v;
 
     }
@@ -69,7 +71,7 @@ public final class Utils {
 
         for (int i = 0; i<16; i++){
 
-            str = extendString(Long.toHexString(xor(Long.parseLong(strU[i], 16), Long.parseLong(strV[i], 16))), 2) + str;
+            str = str + extendString(Long.toHexString(xor(Long.parseLong(strU[i], 16), Long.parseLong(strV[i], 16))), 2);
 
         }
 
@@ -186,6 +188,17 @@ public final class Utils {
         }
         return str;
     }
+
+    public static String extendStringEnd (String str, int сharacters){
+
+        //Метод дописывает в конец строки str символы "0", чтобы количество символов строки было кратно сharacters
+
+        while (str.length() % сharacters != 0){
+            str = str + "0";
+        }
+        return str;
+    }
+
 
     public static long cyclicShift(long num, int r){
 

@@ -197,8 +197,8 @@ public final class Converter {
         }
 
 
-        //return Reverse(Converter.toHexString(Converter.Concatenate(rez)));
-        return Converter.toHexString(Converter.Concatenate(rez));
+        return Reverse(Converter.toHexString(Converter.Concatenate(rez)));
+        //return Converter.toHexString(Converter.Concatenate(rez));
     }
 
     public static String PlusVKrujke (String u, String v){

@@ -1,34 +1,82 @@
 public final class Utils {
 
-    public static long sumModuleN(long u, long v, int n){
-
-        long pow = (long)Math.pow(2, n);
-
-        return (u + v) % pow;
-
-    }
-
     public static long sumModuleN(long u, long v){
+
+        u = reverse(u);
+        v = reverse(v);
 
         long pow = (long)Math.pow(2, 32);
 
-        return (u + v) % pow;
+        return reverse((u + v) % pow);
 
     }
+
+    public static long sumModuleN(long u, long v, long w){
+
+        u = reverse(u);
+        v = reverse(v);
+        w = reverse(w);
+
+        long pow = (long)Math.pow(2, 32);
+
+        return reverse((u + v + w) % pow);
+    }
+
 
     public static long difModuleN(long u, long v){
 
-        long pow = (long)Math.pow(2, 32);
+        u = reverse(u);
+        v = reverse(v);
 
-        return (u - v) % pow;
+        long pow = (long)Math.pow(2, 32);
+        long a = (u - v) % pow;
+
+        //откинуть первые ffffffff
+        String s = Long.toHexString(a);
+        if (s.length() > 8) {
+            s = s.substring(8, 16);
+        }
+
+        return reverse(a);
 
     }
 
     public static long xor(long u, long v) {
 
+        //u и v - числа по 4 байта
         return u^v;
 
     }
+
+    public static String xor(String u, String v) {
+
+        //на входе  : две строки длиной от 0 до 16 байт
+        //на выходе : строка 16 байт
+
+        // 128 бит = 16 байт
+
+        //1. расширяем строки до 16 байт
+        //2. делим строки на байты
+        //3. ксорим байты попартно, расширяем результат до 2 символов если надо, складываем в конечную строку
+
+        u = extendString(u, 16);
+        v = extendString(v, 16);
+
+        String[] strU = split(u, 16);
+        String[] strV = split(v, 16);
+
+        String str = "";
+
+        for (int i = 0; i<16; i++){
+
+            str = extendString(Long.toHexString(xor(Long.parseLong(strU[i], 16), Long.parseLong(strV[i], 16))), 2) + str;
+
+        }
+
+        return str;
+
+    }
+
 
     public static long H[] = {
                 0xB1,0x94,0xBA,0xC8,0x0A,0x08,0xF5,0x3B,0x36,0x6D,0x00,0x8E,0x58,0x4A,0x5D,0xE4,
